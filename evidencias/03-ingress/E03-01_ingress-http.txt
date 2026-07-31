@@ -1,0 +1,38 @@
+=== kubectl get ingress ===
+NAME                 CLASS   HOSTS                    ADDRESS        PORTS   AGE
+inventrack-ingress   nginx   conjunta3p.espe.edu.ec   192.168.49.2   80      15m
+
+=== HTTP /api/health via Minikube IP ===
+HTTP/1.1 200 OK
+Date: Thu, 30 Jul 2026 21:21:23 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 54
+Connection: keep-alive
+X-Powered-By: Express
+Access-Control-Allow-Origin: *
+ETag: W/"36-Trtb0s1Krmqpn5JZiQOIKWFdW+4"
+
+{"status":"ok","message":"InvenTrack API funcionando"}
+
+=== HTTP frontend via Minikube IP ===
+HTTP/1.1 200 OK
+Date: Thu, 30 Jul 2026 21:21:23 GMT
+Content-Type: text/html
+Content-Length: 459
+Connection: keep-alive
+Last-Modified: Thu, 30 Jul 2026 20:23:57 GMT
+ETag: "6a6bb2dd-1cb"
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Referrer-Policy: strict-origin-when-cross-origin
+Accept-Ranges: bytes
+
+
+=== Windows portproxy ===
+
+Listen on ipv4:             Connect to ipv4:
+
+Address         Port        Address         Port
+--------------- ----------  --------------- ----------
+0.0.0.0         3000        172.25.209.128  3000
+127.0.0.1       80          172.25.209.128  9080

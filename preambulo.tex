@@ -1,0 +1,242 @@
+\documentclass[12pt,letterpaper,oneside]{report}
+
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setsansfont{Times New Roman}
+\setmonofont{Consolas}[Scale=0.82]
+
+\usepackage[letterpaper,margin=2.35cm,headheight=25pt]{geometry}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{setspace}
+\setstretch{1.12}
+
+\usepackage{xcolor}
+\definecolor{EspeGreen}{HTML}{006B4F}
+\definecolor{EspeGreenDark}{HTML}{004B38}
+\definecolor{CyberCyan}{HTML}{00A8B5}
+\definecolor{CyberBlue}{HTML}{10243E}
+\definecolor{Ink}{HTML}{1E293B}
+\definecolor{SoftGray}{HTML}{F3F6F8}
+\definecolor{LineGray}{HTML}{CBD5E1}
+\definecolor{Critical}{HTML}{B42318}
+\definecolor{High}{HTML}{D92D20}
+\definecolor{Medium}{HTML}{B54708}
+\definecolor{Low}{HTML}{175CD3}
+\definecolor{Effective}{HTML}{067647}
+\definecolor{UbuntuOrange}{HTML}{E95420}
+\definecolor{UbuntuAubergine}{HTML}{772953}
+\definecolor{TerminalBlack}{HTML}{17191C}
+\definecolor{TerminalPanel}{HTML}{23262B}
+\definecolor{TerminalText}{HTML}{F1F1F1}
+\definecolor{TerminalMuted}{HTML}{AAB2BF}
+\definecolor{TerminalGreen}{HTML}{4AF626}
+\definecolor{TerminalYellow}{HTML}{F9E64F}
+\definecolor{TerminalRed}{HTML}{FF5F56}
+
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\graphicspath{{evidencias/report/img/}{assets/}}
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{calc}
+\newcounter{none}
+\renewcommand{\arraystretch}{1.14}
+\arrayrulecolor{EspeGreenDark}
+
+\usepackage{enumitem}
+\setlist{itemsep=2pt,topsep=4pt}
+\usepackage{fvextra}
+\usepackage{upquote}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable,skins,hooks}
+
+\tcbset{
+  codebox/.style={
+    enhanced,
+    breakable,
+    colback=TerminalBlack,
+    colframe=UbuntuAubergine,
+    coltext=TerminalText,
+    fontupper=\color{TerminalText}\ttfamily,
+    boxrule=0.75pt,
+    arc=1.8mm,
+    left=3mm,
+    right=2.5mm,
+    top=6.5mm,
+    bottom=2.5mm,
+    borderline west={2.8pt}{0pt}{TerminalGreen},
+    borderline north={0.9pt}{0pt}{UbuntuOrange},
+    overlay unbroken and first={
+      \fill[TerminalRed] ([xshift=4mm,yshift=-3.1mm]frame.north west) circle (1.05mm);
+      \fill[TerminalYellow] ([xshift=8mm,yshift=-3.1mm]frame.north west) circle (1.05mm);
+      \fill[TerminalGreen] ([xshift=12mm,yshift=-3.1mm]frame.north west) circle (1.05mm);
+      \node[anchor=north east,text=TerminalMuted,font=\scriptsize\ttfamily]
+        at ([xshift=-3mm,yshift=-1.65mm]frame.north east)
+        {gabriel@inventrack:\textasciitilde\$};
+    }
+  },
+  infobox/.style={
+    enhanced,
+    breakable,
+    colback=CyberCyan!6,
+    colframe=CyberCyan!70!black,
+    boxrule=0.7pt,
+    arc=1.8mm,
+    left=3mm,
+    right=3mm,
+    top=2.5mm,
+    bottom=2.5mm,
+    borderline west={2.4pt}{0pt}{UbuntuOrange}
+  },
+  criticalbox/.style={
+    enhanced,
+    breakable,
+    colback=Critical!4,
+    colframe=Critical,
+    boxrule=0.8pt,
+    arc=1.8mm,
+    left=3mm,
+    right=3mm,
+    top=2.5mm,
+    bottom=2.5mm,
+    borderline west={2.4pt}{0pt}{UbuntuOrange}
+  },
+  controlbox/.style={
+    enhanced,
+    breakable,
+    colback=Effective!4,
+    colframe=Effective,
+    boxrule=0.7pt,
+    arc=1.8mm,
+    left=3mm,
+    right=3mm,
+    top=2.5mm,
+    bottom=2.5mm
+  },
+  coverbox/.style={
+    enhanced,
+    colback=TerminalPanel,
+    colframe=UbuntuOrange,
+    coltext=white,
+    boxrule=0.9pt,
+    arc=2.2mm,
+    left=4mm,
+    right=4mm,
+    top=3.5mm,
+    bottom=3.5mm,
+    borderline west={3pt}{0pt}{TerminalGreen}
+  }
+}
+
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,shapes.geometric,decorations.pathmorphing}
+\usepackage{fontawesome5}
+\usepackage{float}
+\usepackage{caption}
+\makeatletter
+\@removefromreset{table}{chapter}
+\renewcommand{\thetable}{\arabic{table}}
+\makeatother
+\addto\captionsspanish{
+  \renewcommand{\tablename}{Cuadro}
+  \renewcommand{\listtablename}{Índice de cuadros}
+  \renewcommand{\figurename}{Figura}
+}
+\captionsetup{
+  hypcap=false,
+  font=small,
+  labelfont={bf,color=EspeGreenDark},
+  textfont={color=Ink},
+  justification=centering,
+  singlelinecheck=false
+}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small InvenTrack - Docker, Kubernetes y PTES}
+\fancyhead[R]{\small\bfseries Gabriel Murillo}
+\fancyfoot[C]{\small \thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{UbuntuOrange}\leaders\hrule height \headrulewidth\hfill}}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\bfseries\color{CyberBlue}}
+  {\filleft\color{UbuntuOrange}\fontsize{42}{42}\selectfont\thechapter}
+  {0.4ex}
+  {\titlerule\vspace{1.2ex}\filright\Huge}
+  [\vspace{0.8ex}\color{EspeGreen}\titlerule]
+\titleformat{\section}
+  {\Large\bfseries\color{EspeGreenDark}}
+  {\thesection}{0.7em}{}
+\titleformat{\subsection}
+  {\large\bfseries\color{CyberBlue}}
+  {\thesubsection}{0.7em}{}
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{UbuntuAubergine}}
+  {\thesubsubsection}{0.7em}{}
+
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{bookmark}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=EspeGreenDark,
+  urlcolor=UbuntuOrange,
+  citecolor=EspeGreenDark,
+  pdftitle={Informe Tecnico Final - InvenTrack Docker, Kubernetes y PTES},
+  pdfauthor={Gabriel Murillo},
+  pdfsubject={Desarrollo Seguro - ESPE - Periodo academico ESPE VII SI 2026},
+  pdfkeywords={InvenTrack, Docker, Kubernetes, Minikube, PTES, pentesting}
+}
+
+\newcommand{\ReportRepo}{https://github.com/gamurigm/inventrack-ptes-report}
+\newcommand{\KubernetesRepo}{https://github.com/gamurigm/inventrack-k8s}
+\newcommand{\ApplicationRepo}{https://github.com/agcudco/conjunta-desarrollo-seguro}
+\newcommand{\ReportAuthor}{Gabriel Murillo}
+\newcommand{\AcademicPeriod}{ESPE VII SI 2026}
+\newcommand{\ReportDate}{31 de julio de 2026}
+
+\newcommand{\pandocbounded}[1]{%
+  \begin{center}
+    \begin{adjustbox}{max width=\linewidth,max totalheight=0.78\textheight,center}
+      #1
+    \end{adjustbox}
+  \end{center}
+}
+
+\makeatletter
+\define@key{Gin}{alt}{}
+\makeatother
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\newcommand{\severity}[2]{%
+  \begingroup
+  \ifcase#1\relax
+    \colorbox{LineGray}{\strut\textcolor{Ink}{\bfseries #2}}%
+  \or
+    \colorbox{Low!15}{\strut\textcolor{Low}{\bfseries #2}}%
+  \or
+    \colorbox{Medium!15}{\strut\textcolor{Medium}{\bfseries #2}}%
+  \or
+    \colorbox{High!12}{\strut\textcolor{High}{\bfseries #2}}%
+  \or
+    \colorbox{Critical!12}{\strut\textcolor{Critical}{\bfseries #2}}%
+  \fi
+  \endgroup
+}
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+\emergencystretch=2em
+\sloppy

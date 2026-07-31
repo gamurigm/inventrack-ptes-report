@@ -1,0 +1,15 @@
+\section{PTES Fase 6 - Post-Exploitation}\label{ptes-fase-6---post-exploitation}
+
+Estado: completado. E06-01 confirmo almacenamiento compatible con bcrypt; E05-12 valido revocacion, E05-13 documento impacto minimo y separacion de privilegios, E05-14/E05-15 documentaron limpieza de archivos y marcadores, y E06-02 confirmo health HTTP 200, pods estables y eventos normales. No se conservaron valores secretos ni artefactos operativos.
+
+\subsection{Explotacion demostrada y limite del movimiento lateral}\label{explotacion-demostrada-y-limite-del-movimiento-lateral}
+
+El sistema si fue vulnerado de forma reproducible: E05-01 convirtio una solicitud anonima en una cuenta con rol admin, emitio un JWT administrativo y permitio acceder a \texttt{/api/usuarios}. E05-13 confirmo que ese nivel de acceso tambien alcanza \texttt{/api/auditoria}. Esta cadena es un escalamiento vertical de privilegios desde no autenticado hasta administrador de la aplicacion y sustenta el hallazgo critico F-01.
+
+No se demostro movimiento lateral. El acceso administrativo de la aplicacion no entrego ejecucion de comandos, shell de contenedor, credenciales de infraestructura ni acceso directo a otro pod. Usar \texttt{kubectl\ exec} para entrar al backend habria sido una simulacion de brecha administrada por el operador, no una consecuencia del exploit F-01, y no debe presentarse como una cadena real.
+
+El alcance P01-01 excluye API de Kubernetes, servicios internos no publicados, MySQL directo, red pod a pod, persistencia, escape de contenedor y aumento de privilegios fuera de lo autorizado. Por ello no se probaron los puertos de kubelet, etcd, Docker o API Server observados por Nmap.
+
+La revision estatica identifica tres factores que aumentarian el radio de impacto si en el futuro se obtuviera una ejecucion remota real en el backend: \texttt{DB\_USER} esta configurado como \texttt{root}, no se deshabilita explicitamente el montaje automatico del token de ServiceAccount y las NetworkPolicies controlan ingreso pero no definen una politica de egreso por defecto. Se registran como riesgos de arquitectura y objetivos de endurecimiento, no como movimiento lateral explotado.
+
+Evidencias: evidencias/ptes/06-post-exploitation/E06-01\_bcrypt.txt y E06-02\_retest-cleanup.txt.

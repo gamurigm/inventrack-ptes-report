@@ -1,0 +1,10 @@
+# Nmap 7.99 scan initiated Thu Jul 30 16:33:06 2026 as: /usr/lib/nmap/nmap --privileged -Pn -sT -sV --version-light -T3 --max-retries 1 -p 80,443 -oA "/mnt/c/Users/gamur/Documents/ESPE VII SI 2026/Desarrollo Seguro/U3/Conjunta/evidencias/ptes/02-intelligence/E02-03_nmap-servicios" conjunta3p.espe.edu.ec
+Nmap scan report for conjunta3p.espe.edu.ec (192.168.49.2)
+Host is up (0.00011s latency).
+
+PORT    STATE SERVICE  VERSION
+80/tcp  open  http     nginx (reverse proxy)
+443/tcp open  ssl/http nginx (reverse proxy)
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Thu Jul 30 16:33:24 2026 -- 1 IP address (1 host up) scanned in 17.61 seconds

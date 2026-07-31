@@ -1,0 +1,159 @@
+\section{G0 - Preparacion del Entorno}\label{g0---preparacion-del-entorno}
+
+\subsection{Resultado}\label{resultado}
+
+G0 tecnico fue completado correctamente en WSL Ubuntu.
+
+Los comandos de preparacion estan documentados una sola vez en \texttt{Registro\ Completo\ de\ Comandos\ \textgreater{}\ 00\ -\ Preparacion\ del\ Laboratorio}.
+
+\subsection{Resultado Observado}\label{resultado-observado}
+
+\begin{itemize}
+\tightlist
+\item
+  Ubuntu WSL2 operativo.
+\item
+  Docker Engine responde desde Ubuntu.
+\item
+  Docker usa contenedores Linux: \texttt{Docker\ OSType=linux}.
+\item
+  \texttt{kubectl} responde con version cliente \texttt{v1.36.2}.
+\item
+  \texttt{minikube} responde con version \texttt{v1.38.1}.
+\end{itemize}
+
+\section{G1 - Baseline de InvenTrack}\label{g1---baseline-de-inventrack}
+
+Estado: completado para baseline y control de cambios.
+
+\begin{itemize}
+\tightlist
+\item
+  La practica se trabajo directamente en la rama main.
+\item
+  El commit base registrado fue 6ae827e first commit.
+\item
+  El inventario inicial contiene 81 archivos de backend, frontend y mysql-init.
+\item
+  E00-02 y E00-03 conservan el inventario y el estado Git inicial.
+\item
+  No se creo ni se uso una rama auxiliar.
+\item
+  Los tests backend y build frontend de E00-04 y E00-05 quedan como pendiente adicional, sin afectar la validacion Docker/Kubernetes ya ejecutada.
+\end{itemize}
+
+\section{Dockerizacion}\label{dockerizacion}
+
+Estado: completado en Docker Compose.
+
+\subsection{Cambios realizados}\label{cambios-realizados}
+
+Backend:
+
+\begin{itemize}
+\tightlist
+\item
+  Dockerfile multi-stage basado en node:20-alpine.
+\item
+  npm ci -\/-omit=dev para dependencias reproducibles.
+\item
+  Copia selectiva de node\_modules de produccion y src.
+\item
+  Usuario efectivo node, uid 1000.
+\item
+  Directorio /app/uploads preparado para escritura.
+\end{itemize}
+
+Frontend:
+
+\begin{itemize}
+\tightlist
+\item
+  Dockerfile multi-stage con node:20-alpine para build.
+\item
+  Runtime nginxinc/nginx-unprivileged:alpine.
+\item
+  Nginx escucha en 8080 y usa fallback SPA.
+\item
+  Proxy local para /api y /uploads.
+\item
+  api.js usa la ruta relativa /api.
+\item
+  Cabeceras defensivas basicas configuradas.
+\end{itemize}
+
+MySQL y Compose:
+
+\begin{itemize}
+\tightlist
+\item
+  mysql-init/Dockerfile empaqueta init.sql.
+\item
+  docker-compose construye backend, frontend y MySQL.
+\item
+  .env.example contiene placeholders y .env permanece ignorado.
+\item
+  Backend y frontend ejecutan npm ci con lockfiles sincronizados.
+\end{itemize}
+
+\subsection{Validacion}\label{validacion}
+
+Las imagenes construyeron correctamente. Docker Compose dejo backend, frontend y MySQL en ejecucion; MySQL quedo healthy. El backend y frontend se validaron por HTTP y los procesos de backend/frontend quedaron sin root.
+
+La salida muestra \texttt{inventrack-frontend}, \texttt{inventrack-backend} e \texttt{inventrack-mysql} en estado \texttt{Up}; MySQL aparece como \texttt{healthy}. Tambien se observa el contenedor de Minikube activo, utilizado posteriormente para Kubernetes.
+
+Evidencias: evidencias/01-docker/E01-01\_docker-compose-build.txt a E01-07\_frontend-proxy-health.txt y evidencias/report/img/E01-08\_docker-ps.png.
+
+\section{Manifiestos Kubernetes}\label{manifiestos-kubernetes}
+
+Estado: completado.
+
+El repositorio independiente inventrack-k8s se trabajo en main y contiene manifiestos YAML para:
+
+\begin{itemize}
+\tightlist
+\item
+  Namespace inventrack-prod.
+\item
+  Deployments y Services ClusterIP para backend, frontend y MySQL.
+\item
+  ConfigMap para configuracion no sensible.
+\item
+  Secret de laboratorio creado directamente en el cluster y excluido de kustomization y Git.
+\item
+  PVC para datos MySQL y archivos de backend.
+\item
+  NetworkPolicies para limitar frontend, backend y MySQL.
+\item
+  Ingress Nginx con /api y /uploads hacia backend y / hacia frontend.
+\end{itemize}
+
+Las imagenes locales se etiquetaron como inventrack-backend:1.0.0, inventrack-frontend:1.0.0 e inventrack-mysql:1.0.0 y se cargaron en Minikube con imagePullPolicy IfNotPresent. El frontend usa el puerto 8080 de Nginx no privilegiado.
+
+Evidencias: evidencias/02-k8s/E02-01\_kubectl-recursos.txt y E02-02\_rollouts.txt.
+
+\section{Despliegue e Ingress}\label{despliegue-e-ingress}
+
+Estado: completado en Minikube y validado desde Kali y Windows.
+
+Minikube se ejecuto en Ubuntu WSL con el driver Docker. El nodo quedo Ready y el controlador ingress-nginx completo su rollout. El Ingress publicado usa:
+
+\begin{itemize}
+\tightlist
+\item
+  Host: conjunta3p.espe.edu.ec
+\item
+  IP de Minikube: 192.168.49.2
+\item
+  Frontend: /
+\item
+  Backend: /api y /uploads
+\end{itemize}
+
+La prueba desde Ubuntu con curl -\/-resolve devolvio 200 OK para /api/health y para la raiz frontend. Windows usa hosts con 127.0.0.1 y un portproxy de 127.0.0.1:80 hacia 172.25.209.128:9080. Kali usa /etc/hosts hacia 192.168.49.2 y tambien recibe 200 OK. E03-04 conserva las lineas exactas de hosts, portproxy y getent, demostrando que ambos mapeos terminan en el laboratorio local.
+
+La cuenta admin de laboratorio se creo dentro de Kubernetes y el endpoint protegido de seed cargo 5 productos, 3 categorias, 2 proveedores, 193 unidades y 2 movimientos observados. Esta base usa un PVC independiente de Docker Compose.
+
+Evidencias: evidencias/03-ingress/E03-01\_ingress-http.txt, E03-02\_seed-kubernetes.txt, E03-03\_limpieza-colision-ingress.md y E03-04\_resolucion-hosts.txt.
+
+Durante la preparacion se retiro de forma autorizada el namespace antiguo murillo-lopez, junto con sus recursos asociados, porque su Ingress cavalocal usaba el mismo host de laboratorio y bloqueaba la admision del Ingress de InvenTrack. La inspeccion previa y la eliminacion quedaron documentadas en E03-03; no se eliminaron recursos ajenos al laboratorio.

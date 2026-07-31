@@ -1,0 +1,41 @@
+\section{PTES Fase 5 - Exploitation}\label{ptes-fase-5---exploitation}
+
+Estado: completado; autenticacion, SQLi, rate limit, controles JWT, revocacion de sesion, RBAC, imagenes, carga masiva, chatbot, impacto minimo, bcrypt y retest fueron validados.
+
+Se valido de forma controlada la hipotesis de registro con rol privilegiado. Desde Kali, sin JWT, el endpoint POST /api/auth/register acepto una cuenta nueva solicitando rol admin y devolvio HTTP 201. La cuenta pudo iniciar sesion con HTTP 200 y el JWT resultante incluyo rol admin; con ese token se accedio a GET /api/usuarios, endpoint protegido para administradores, con HTTP 200.
+
+La cuenta temporal fue desactivada mediante PATCH administrativo y el login posterior devolvio HTTP 403. No se conservaron contrasenas ni tokens. El resultado confirma escalacion de privilegios desde el registro publico; la severidad y el CVSS se determinaran despues de completar impacto, mitigacion y retest.
+
+Los comandos completos de esta fase estan documentados en \texttt{Registro\ Completo\ de\ Comandos\ \textgreater{}\ PTES\ 05\ -\ Exploitation}. Alli constan el registro privilegiado, SQLi, rate limit, revision JWT, prueba negativa, intento operativo fallido \texttt{E05-08}, JWT valido versus alterado, claims y expiracion \texttt{E05-11}, revocacion \texttt{E05-12}, RBAC/IDOR \texttt{E05-13}, validacion de imagen \texttt{E05-14}, carga masiva \texttt{E05-15} y chatbot \texttt{E05-16}, incluyendo el intento fallido de credenciales.
+
+Evidencia: evidencias/ptes/05-exploitation/E05-01\_auth-role-escalation.txt.
+
+La prueba TC-SQLI-01 envio un payload clasico de inyeccion en el campo email, con contrasena invalida. El login devolvio HTTP 401, no entrego token y no mostro indicadores de error SQL. El resultado se registra como control efectivo para este caso de prueba.
+
+Evidencia: evidencias/ptes/05-exploitation/E05-02\_sqli-login.txt.
+
+La revision de codigo encontro una ventana de cinco minutos, maximo de tres intentos y cabeceras estandar habilitadas. La prueba dinamica confirmo tres respuestas 401 y una cuarta 429; RateLimit-Remaining llego a 0 y se envio Retry-After. El control de fuerza bruta funciona en esta prueba puntual.
+
+La revision del control JWT encontro que no existe refresh token: el JWT dura 8 horas y la aplicacion sondea /api/auth/perfil. El codigo original verifica la sesion cada 3 segundos aunque la documentacion exige 5 segundos. La fuente original fue preservada. E05-12 confirmo que la cuenta desactivada invalida el uso del JWT previo y bloquea el login posterior; queda pendiente solamente medir visualmente el intervalo de sondeo del frontend.
+
+Evidencia: evidencias/ptes/05-exploitation/E05-04\_jwt-session-control.md.
+
+La prueba dinamica negativa de JWT confirmo que \texttt{GET\ /api/productos} devuelve HTTP 401 con \texttt{Token\ no\ proporcionado} si falta la cabecera Authorization, y HTTP 403 con \texttt{Token\ invalido\ o\ expirado} para \texttt{Bearer\ invalid}. El archivo crudo conserva una solicitud repetida sin cabecera, rotulada por error como bearer invalido; el analisis E05-07 la separa de la prueba valida.
+
+Evidencias: evidencias/ptes/05-exploitation/E05-06\_jwt-negative.txt y E05-07\_jwt-negative-analysis.md.
+
+La prueba posterior con token valido confirmo que \texttt{GET\ /api/productos} responde HTTP 200 y devuelve los productos demo cuando se usa un JWT emitido por el login. Al modificar la firma del mismo token, el backend respondio HTTP 403 con \texttt{Token\ invalido\ o\ expirado}. No se imprimio ni guardo el JWT completo en la evidencia. El intento previo \texttt{E05-08\_attempt-body-empty.txt} se conserva como error operativo por cuerpo de login vacio y no se cuenta como resultado de seguridad.
+
+Evidencias: evidencias/ptes/05-exploitation/E05-09\_jwt-valid-vs-tampered.txt y E05-10\_jwt-valid-vs-tampered-analysis.md.
+
+E05-11 quedo ejecutado. El JWT observado usa HS256, incluye el rol \texttt{admin} y expira en 8 horas. E05-12 quedo ejecutado: el perfil de la cuenta temporal respondio 200 antes de la desactivacion; despues, el token previo respondio 403 y el login posterior fue rechazado. Esto valida la revocacion backend por estado activo sin modificar la fuente original.
+
+Evidencias: evidencias/ptes/05-exploitation/E05-11\_jwt-claims-expiration.txt, evidencias/ptes/05-exploitation/E05-12\_jwt-revocation.txt, evidencias/ptes/05-exploitation/E05-13\_rbac-idor.txt, evidencias/ptes/05-exploitation/E05-14\_upload-image.txt y evidencias/ptes/05-exploitation/E05-16\_chatbot.txt.
+
+La prueba E05-13 valido la separacion de funciones: el admin obtuvo HTTP 200 en usuarios y auditoria; el almacenero obtuvo HTTP 403 en esas rutas y en las operaciones de eliminar/restaurar producto. El almacenero obtuvo HTTP 200 al leer productos y al consultar los IDs 25 y 26. Como los productos son recursos compartidos sin propietario individual, no se confirma IDOR mediante ese cambio de ID.
+
+E05-14 valido los controles de imagen: la ausencia de JWT devolvio 401, el archivo \texttt{text/plain} devolvio 500 generico, el marcador de texto renombrado como JPG fue aceptado con 200 y se sirvio como \texttt{image/jpeg}, y el JPG pequeno fue aceptado. La ausencia de \texttt{X-Content-Type-Options} y la confianza en el MIME declarado quedan como hallazgos de endurecimiento. Los dos archivos fueron eliminados del PVC y sus URLs devolvieron 404 desde Kali.
+
+E05-15 valido la carga masiva: sin JWT devolvio 401, almacenero devolvio 403 y admin devolvio 200. De tres filas, dos fueron creadas; la fila sin SKU fue reportada en \texttt{errores}, pero la fila con numero invalido fue aceptada y convertida a cero por el codigo actual. Los productos 30 y 31 fueron eliminados y la cuenta temporal fue desactivada.
+
+E05-16 valido el endpoint del chatbot con admin y almacenero. Las seis solicitudes devolvieron 200; la pregunta benigna respondio con datos del inventario, el intento de revelar el prompt fue rechazado, la cadena SQL se trato como texto y la solicitud de secretos no revelo valores. El almacenero recibio resumen de inventario y precios de productos, sin datos de usuarios ni funciones administrativas. La cuenta temporal fue desactivada y el primer fallo de credenciales quedo separado como fallo operativo.

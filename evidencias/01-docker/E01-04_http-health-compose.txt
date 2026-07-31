@@ -1,0 +1,27 @@
+Backend health:
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Access-Control-Allow-Origin: *
+Content-Type: application/json; charset=utf-8
+Content-Length: 54
+ETag: W/"36-Trtb0s1Krmqpn5JZiQOIKWFdW+4"
+Date: Thu, 30 Jul 2026 20:14:48 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"status":"ok","message":"InvenTrack API funcionando"}
+
+Frontend headers:
+HTTP/1.1 200 OK
+Server: nginx/1.31.3
+Date: Thu, 30 Jul 2026 20:14:48 GMT
+Content-Type: text/html
+Content-Length: 459
+Last-Modified: Thu, 30 Jul 2026 20:12:05 GMT
+Connection: keep-alive
+ETag: "6a6bb015-1cb"
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Referrer-Policy: strict-origin-when-cross-origin
+Accept-Ranges: bytes
+

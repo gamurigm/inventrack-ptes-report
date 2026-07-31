@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///usr/share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.99 scan initiated Thu Jul 30 16:33:06 2026 as: /usr/lib/nmap/nmap -&#45;privileged -Pn -sT -sV -&#45;version-light -T3 -&#45;max-retries 1 -p 80,443 -oA &quot;/mnt/c/Users/gamur/Documents/ESPE VII SI 2026/Desarrollo Seguro/U3/Conjunta/evidencias/ptes/02-intelligence/E02-03_nmap-servicios&quot; conjunta3p.espe.edu.ec -->
+<nmaprun scanner="nmap" args="/usr/lib/nmap/nmap -&#45;privileged -Pn -sT -sV -&#45;version-light -T3 -&#45;max-retries 1 -p 80,443 -oA &quot;/mnt/c/Users/gamur/Documents/ESPE VII SI 2026/Desarrollo Seguro/U3/Conjunta/evidencias/ptes/02-intelligence/E02-03_nmap-servicios&quot; conjunta3p.espe.edu.ec" start="1785447186" startstr="Thu Jul 30 16:33:06 2026" version="7.99" xmloutputversion="1.05">
+<scaninfo type="connect" protocol="tcp" numservices="2" services="80,443"/>
+<verbose level="0"/>
+<debugging level="0"/>
+<host starttime="1785447187" endtime="1785447204"><status state="up" reason="user-set" reason_ttl="0"/>
+<address addr="192.168.49.2" addrtype="ipv4"/>
+<hostnames>
+<hostname name="conjunta3p.espe.edu.ec" type="user"/>
+<hostname name="conjunta3p.espe.edu.ec" type="PTR"/>
+</hostnames>
+<ports><port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" product="nginx" extrainfo="reverse proxy" method="probed" conf="10"><cpe>cpe:/a:igor_sysoev:nginx</cpe></service></port>
+<port protocol="tcp" portid="443"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" product="nginx" extrainfo="reverse proxy" tunnel="ssl" method="probed" conf="10"><cpe>cpe:/a:igor_sysoev:nginx</cpe></service></port>
+</ports>
+<times srtt="109" rttvar="3777" to="100000"/>
+</host>
+<runstats><finished time="1785447204" timestr="Thu Jul 30 16:33:24 2026" summary="Nmap done at Thu Jul 30 16:33:24 2026; 1 IP address (1 host up) scanned in 17.61 seconds" elapsed="17.61" exit="success"/><hosts up="1" down="0" total="1"/>
+</runstats>
+</nmaprun>

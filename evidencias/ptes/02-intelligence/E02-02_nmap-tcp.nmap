@@ -1,0 +1,21 @@
+# Nmap 7.99 scan initiated Thu Jul 30 16:29:43 2026 as: /usr/lib/nmap/nmap --privileged -Pn -sT -T3 --max-rate 100 -p- -oA "/mnt/c/Users/gamur/Documents/ESPE VII SI 2026/Desarrollo Seguro/U3/Conjunta/evidencias/ptes/02-intelligence/E02-02_nmap-tcp" conjunta3p.espe.edu.ec
+Nmap scan report for conjunta3p.espe.edu.ec (192.168.49.2)
+Host is up (0.000025s latency).
+Not shown: 65521 closed tcp ports (conn-refused)
+PORT      STATE SERVICE
+22/tcp    open  ssh
+80/tcp    open  http
+443/tcp   open  https
+2376/tcp  open  docker
+2379/tcp  open  etcd-client
+2380/tcp  open  etcd-server
+8443/tcp  open  https-alt
+10010/tcp open  rxapi
+10249/tcp open  unknown
+10250/tcp open  unknown
+10256/tcp open  unknown
+31358/tcp open  unknown
+31454/tcp open  unknown
+33337/tcp open  unknown
+
+# Nmap done at Thu Jul 30 16:40:39 2026 -- 1 IP address (1 host up) scanned in 655.48 seconds

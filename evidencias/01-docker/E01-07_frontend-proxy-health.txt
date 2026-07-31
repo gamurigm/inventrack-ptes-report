@@ -1,0 +1,35 @@
+Frontend root status:
+HTTP/1.1 200 OK
+Server: nginx/1.31.3
+Date: Thu, 30 Jul 2026 20:24:28 GMT
+Content-Type: text/html
+Content-Length: 459
+Last-Modified: Thu, 30 Jul 2026 20:23:57 GMT
+Connection: keep-alive
+ETag: "6a6bb2dd-1cb"
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Referrer-Policy: strict-origin-when-cross-origin
+Accept-Ranges: bytes
+
+
+Frontend proxied API health:
+HTTP/1.1 200 OK
+Server: nginx/1.31.3
+Date: Thu, 30 Jul 2026 20:24:28 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 54
+Connection: keep-alive
+X-Powered-By: Express
+Access-Control-Allow-Origin: *
+ETag: W/"36-Trtb0s1Krmqpn5JZiQOIKWFdW+4"
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Referrer-Policy: strict-origin-when-cross-origin
+
+{"status":"ok","message":"InvenTrack API funcionando"}
+Compose ps:
+NAME                  IMAGE                                 COMMAND                  SERVICE    CREATED          STATUS                    PORTS
+inventrack-backend    conjunta-desarrollo-seguro-backend    "docker-entrypoint.s…"   backend    10 minutes ago   Up 9 minutes              0.0.0.0:4000->4000/tcp, [::]:4000->4000/tcp
+inventrack-frontend   conjunta-desarrollo-seguro-frontend   "/docker-entrypoint.…"   frontend   26 seconds ago   Up 24 seconds             0.0.0.0:5173->8080/tcp, [::]:5173->8080/tcp
+inventrack-mysql      conjunta-desarrollo-seguro-mysql      "docker-entrypoint.s…"   mysql      10 minutes ago   Up 10 minutes (healthy)   0.0.0.0:3306->3306/tcp, [::]:3306->3306/tcp, 33060/tcp

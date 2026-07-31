@@ -1,0 +1,8 @@
+{
+    "seed":  "Datos demo cargados correctamente",
+    "total_productos":  5,
+    "total_unidades":  "193",
+    "categorias":  3,
+    "proveedores":  2,
+    "movimientos_observados":  2
+}

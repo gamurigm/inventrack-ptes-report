@@ -1,0 +1,113 @@
+\section{Resumen Ejecutivo}\label{resumen-ejecutivo}
+
+Este informe documenta la containerizacion de InvenTrack, su despliegue en un cluster Kubernetes local mediante Minikube y la auditoria de seguridad basada en PTES. La aplicacion se desplego y se valido bajo el dominio de laboratorio \texttt{conjunta3p.espe.edu.ec}, resuelto localmente hacia el entorno controlado.
+
+El proceso se ejecuta con separacion de entornos: Docker, kubectl y Minikube se operan desde WSL Ubuntu; Kali Linux WSL se reserva para las fases de pentesting y recoleccion de evidencias tecnicas.
+
+\section{Objetivos}\label{objetivos}
+
+\begin{itemize}
+\tightlist
+\item
+  Crear imagenes Docker seguras para backend, frontend y MySQL.
+\item
+  Crear manifiestos Kubernetes para namespace, deployments, services, ConfigMap, Secret, PVC e Ingress.
+\item
+  Desplegar InvenTrack en Minikube y publicar la aplicacion mediante Ingress.
+\item
+  Resolver el dominio \texttt{conjunta3p.espe.edu.ec} hacia el laboratorio local.
+\item
+  Ejecutar y documentar las siete fases PTES.
+\item
+  Clasificar hallazgos por severidad y proponer mitigaciones accionables.
+\end{itemize}
+
+\section{Alcance}\label{alcance}
+
+El alcance autorizado se limita a la instancia local de InvenTrack desplegada para esta practica.
+
+Activos incluidos:
+
+{\def\LTcaptype{none} % do not increment counter
+\captionof{table}{Activos incluidos en el alcance}\label{tab:activos-alcance}
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Activo & Alcance \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Frontend React/Vite & Incluido \\
+Backend Node.js/Express & Incluido \\
+API REST\texttt{/api} & Incluido \\
+Cargas\texttt{/uploads} & Incluido \\
+Base de datos MySQL del laboratorio & Incluida indirectamente desde la aplicacion \\
+Autenticacion JWT y roles & Incluidos \\
+Chatbot IA integrado & Incluido solo como endpoint de InvenTrack \\
+\end{longtable}
+}
+
+Exclusiones:
+
+\begin{itemize}
+\tightlist
+\item
+  Infraestructura real de \texttt{espe.edu.ec}.
+\item
+  Otros subdominios institucionales.
+\item
+  Ataques de denegacion de servicio.
+\item
+  Extraccion completa de datos.
+\item
+  Pruebas directas contra la API de Groq.
+\item
+  Publicacion de secretos reales, tokens o hashes completos.
+\end{itemize}
+
+\section{Reglas de Juego}\label{reglas-de-juego}
+
+\begin{itemize}
+\tightlist
+\item
+  Todas las pruebas activas se ejecutan con bajo volumen y datos de laboratorio.
+\item
+  Antes de escanear desde Kali, se verificara que \texttt{conjunta3p.espe.edu.ec} resuelve al laboratorio local.
+\item
+  Los Secrets reales se crean en Kubernetes y no se versionan.
+\item
+  Toda evidencia con credenciales, tokens, cookies, API keys o hashes completos sera redactada antes de incluirse en el PDF.
+\item
+  Las pruebas se detendran si el dominio resuelve a una IP publica o no esperada.
+\end{itemize}
+
+\section{Arquitectura Objetivo}\label{arquitectura-objetivo}
+
+\begin{tcolorbox}[codebox]
+\begin{Verbatim}[fontsize=\scriptsize,breaklines=true,breakanywhere=true]
+Navegador / Kali
+      |
+      v
+conjunta3p.espe.edu.ec
+      |
+      v
+Ingress Nginx - Minikube
+      |
+      +--> /                 frontend-service
+      +--> /api, /uploads    backend-service
+                                |
+                                v
+                            mysql-service
+                                |
+                                v
+                            MySQL + PVC
+\end{Verbatim}
+\end{tcolorbox}
+
+\section{Base teorica y adaptacion Kubernetes}\label{base-teorica-y-adaptacion-kubernetes}
+
+La base autoritativa de la practica es implement.md; el plan operativo es PLAN\_IMPLEMENTACION\_PTES\_KALI\_WSL.md. Como apoyo teorico se incorporo guia-pentest-k8s.md, especialmente para analizar Ingress, namespaces, Services ClusterIP, NetworkPolicies, Secrets, PVC, securityContext, ServiceAccounts y fronteras de confianza.
+
+La guia teorica tambien contiene tecnicas para API Server, kubelet, etcd, Dashboard, tokens de ServiceAccount, extraccion de Secrets, RCE, escape de contenedor y movimiento lateral. Esas tecnicas no se ejecutan en esta practica: implement.md y la autorizacion P01-01 limitan la auditoria a la aplicacion InvenTrack publicada bajo conjunta3p.espe.edu.ec. Tambien quedan fuera MySQL directo, red interna del cluster, DoS y cualquier infraestructura real de ESPE.
+
+La guia se usa, por tanto, para fundamentar el modelo de amenazas y los controles Kubernetes, no para ampliar el alcance autorizado.

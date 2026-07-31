@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+Date: Thu, 30 Jul 2026 21:33:48 GMT
+Content-Type: text/html
+Content-Length: 459
+Connection: keep-alive
+Last-Modified: Thu, 30 Jul 2026 20:23:57 GMT
+ETag: "6a6bb2dd-1cb"
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Referrer-Policy: strict-origin-when-cross-origin
+Accept-Ranges: bytes
+

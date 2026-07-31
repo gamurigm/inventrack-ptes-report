@@ -1,0 +1,75 @@
+\section{PTES Fase 4 - Vulnerability Analysis}\label{ptes-fase-4---vulnerability-analysis}
+
+Estado: completado.
+
+Orden de ejecucion: las pruebas de autenticacion, JWT, revocacion de sesion, RBAC/IDOR, rate limiting, uploads y chatbot pertenecen a PTES Fase 5 y no se contabilizan como Vulnerability Analysis. La validacion del sondeo de sesion documentado como 5 segundos se ejecutara despues de cerrar Fase 4. La fuente original no se modifica.
+
+Se realizo una comprobacion manual de bajo volumen desde Kali, precedida por validacion fail-closed de resolucion. conjunta3p.espe.edu.ec resolvio a 192.168.49.2 y GET /api/db-test devolvio HTTP 200 sin autenticacion, con el cuerpo \{"status":"ok","resultado":2\}. La respuesta no expuso credenciales ni secretos, pero confirma que el endpoint diagnostico esta publicado y es reproducible.
+
+Este resultado queda como candidato de vulnerabilidad por divulgacion de informacion/endpoint diagnostico. La revision estatica confirma que la consulta no lee tablas de negocio, pero el camino de error devuelve error.message con HTTP 500. No se asigna severidad final hasta validar impacto y mitigacion.
+
+Evidencia: evidencias/ptes/04-vulnerability-analysis/E04-00\_precheck-db-test.txt y evidencias/ptes/04-vulnerability-analysis/E04-07\_capture-db-test.txt.
+
+Los comandos completos de esta fase, incluidos la instalacion y los tres reintentos fallidos de ZAP, estan documentados en \texttt{Registro\ Completo\ de\ Comandos\ \textgreater{}\ PTES\ 04\ -\ Vulnerability\ Analysis}.
+
+Nikto se ejecuto con limite de 90 segundos. Reporto ausencia de CSP, Permissions-Policy y HSTS, ademas de dos rutas de historial que resultaron falsos positivos del fallback SPA. La comprobacion manual confirmo que /.bash\_history y /.sh\_history devuelven el HTML del frontend, mientras /uploads/readme.txt devuelve 404. CSP y Permissions-Policy quedan como observaciones de endurecimiento; HSTS no se valora como hallazgo en este servicio HTTP de laboratorio.
+
+Evidencias: evidencias/ptes/04-vulnerability-analysis/E04-02\_nikto.txt y E04-03\_nikto-false-positive-check.txt.
+
+Nuclei v3.8.0 se ejecuto con 5 solicitudes por segundo, concurrencia 2, timeout de solicitud de 5 segundos, reintentos 0 y limite externo de 60 segundos. Cargo 10.475 plantillas y alcanzo 333 solicitudes de 18.312 estimadas; no produjo coincidencias, pero termino con codigo 124 y cuatro errores de ejecucion. El resultado es parcial y no permite concluir ausencia de vulnerabilidades.
+
+Evidencia: evidencias/ptes/04-vulnerability-analysis/E04-04\_nuclei.txt.
+
+La comprobacion inicial no encontro el ejecutable de OWASP ZAP en Kali; ese estado historico se conserva en E04-05. Posteriormente se instalo ZAP 2.17.0 en Kali y se ejecuto un quick scan en modo no interactivo contra el dominio de laboratorio, guardando reporte HTML y consola en E04-11.
+
+El reporte ZAP registra 0 alertas altas, 1 alerta media por ausencia de Content-Security-Policy en tres rutas, 1 alerta baja por divulgacion de timestamp Unix y 2 alertas informativas. Estos resultados no sustituyen la validacion manual: CSP coincide con la observacion previa de Nikto y CORS; el timestamp queda como candidato de bajo impacto hasta su analisis final. El escaneo tambien reporto 5 por ciento de fallos de red, por lo que el resultado se interpreta como cobertura automatizada acotada, no como ausencia total de vulnerabilidades.
+
+Evidencias: evidencias/ptes/04-vulnerability-analysis/E04-05\_tool-availability.txt, E04-11\_zap-report.html, E04-11\_zap-console.txt y E04-12\_zap-analysis.md.
+
+El analisis textual conserva las rutas, evidencias y criterio de interpretacion de cada alerta, incluido el descarte preliminar del comentario sospechoso como posible falso positivo del bundle minificado.
+
+La prueba manual de CORS envio Origin: \href{https://evil.example}{\url{https://evil.example}}. GET /api/health y el preflight OPTIONS de /api/productos devolvieron Access-Control-Allow-Origin: *. No se observo Access-Control-Allow-Credentials. El frontend conserva X-Frame-Options: DENY, X-Content-Type-Options: nosniff y Referrer-Policy; CSP y Permissions-Policy siguen ausentes.
+
+Evidencia: evidencias/ptes/04-vulnerability-analysis/E04-06\_cors-headers.txt.
+
+La captura de la respuesta de \texttt{/api/db-test} muestra HTTP 200 OK, \texttt{X-Powered-By:\ Express} y \texttt{Access-Control-Allow-Origin:\ *}. La evidencia textual conserva las cabeceras completas y el cuerpo JSON \texttt{\{status: ok, resultado: 2\}}.
+
+Evidencia textual: evidencias/ptes/04-vulnerability-analysis/E04-07\_capture-db-test.txt.
+
+\subsection{Cobertura real de herramientas Kali}\label{cobertura-real-de-herramientas-kali}
+
+El numero de herramientas no se usa como sustituto de cobertura tecnica. Cada herramienta se vinculo con una hipotesis y se informa con su estado real:
+
+\begin{itemize}
+\tightlist
+\item
+  Nmap: ejecutado y completado para descubrimiento TCP; deteccion de servicios completada en 80/443.
+\item
+  WhatWeb: ejecutado y completado contra la raiz del dominio.
+\item
+  Nikto: ejecutado con timebox de 90 segundos; resultados parciales contrastados manualmente.
+\item
+  Nuclei: ejecutado con 5 req/s y concurrencia 2, pero solo alcanzo 333 de 18312 solicitudes estimadas (1\%); cobertura parcial.
+\item
+  OWASP ZAP 2.17.0: quick scan no autenticado completado con reporte HTML.
+\item
+  cURL, jq y rg: usados extensamente para pruebas manuales, payloads controlados, revision estatica y validacion de respuestas.
+\item
+  Burp Suite: sin evidencia de ejecucion. Las rutas autenticadas se validaron con solicitudes reproducibles de cURL, no se atribuyen a Burp.
+\item
+  Hydra: no ejecutado. El rate limiting se valido con cuatro solicitudes secuenciales de cURL para evitar fuerza bruta innecesaria.
+\item
+  SQLMap: no ejecutado. El plan lo condicionaba a encontrar un parametro candidato; el payload manual fue rechazado y el codigo usa consultas parametrizadas.
+\end{itemize}
+
+Resumen visible de los escaneres:
+
+\begin{tcolorbox}[codebox]
+\begin{Verbatim}[fontsize=\scriptsize,breaklines=true,breakanywhere=true]
+Nikto 2.6.0: CSP y Permissions-Policy ausentes; rutas history descartadas como fallback SPA
+Nuclei 3.8.0: 333/18312 solicitudes, 0 matches, 4 errores, exit 124 (resultado parcial)
+ZAP 2.17.0: 0 altas, 1 media, 1 baja, 2 informativas, reporte generado
+\end{Verbatim}
+\end{tcolorbox}
+
+Con esto se cierra PTES Fase 4. La cobertura incluye cURL, revision estatica, Nikto, Nuclei parcial, OWASP ZAP y pruebas manuales de CORS, cabeceras y endpoint diagnostico. Las pruebas autenticadas de Fase 5 se ejecutaron posteriormente y quedaron documentadas con resultados y limpieza.

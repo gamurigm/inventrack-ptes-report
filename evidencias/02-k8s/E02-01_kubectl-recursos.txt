@@ -1,0 +1,34 @@
+=== kubectl get all -n inventrack-prod ===
+NAME                            READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+pod/backend-746d844554-jjfvd    1/1     Running   0          17m   10.244.0.55   minikube   <none>           <none>
+pod/frontend-74499cd756-w9jrb   1/1     Running   0          17m   10.244.0.54   minikube   <none>           <none>
+pod/mysql-5c4d8b7f97-g9jn4      1/1     Running   0          17m   10.244.0.56   minikube   <none>           <none>
+
+NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE   SELECTOR
+service/backend    ClusterIP   10.101.77.233    <none>        4000/TCP   17m   app=backend
+service/frontend   ClusterIP   10.107.174.120   <none>        80/TCP     17m   app=frontend
+service/mysql      ClusterIP   10.111.203.224   <none>        3306/TCP   17m   app=mysql
+
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                      SELECTOR
+deployment.apps/backend    1/1     1            1           17m   backend      inventrack-backend:1.0.0    app=backend
+deployment.apps/frontend   1/1     1            1           17m   frontend     inventrack-frontend:1.0.0   app=frontend
+deployment.apps/mysql      1/1     1            1           17m   mysql        inventrack-mysql:1.0.0      app=mysql
+
+NAME                                  DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES                      SELECTOR
+replicaset.apps/backend-746d844554    1         1         1       17m   backend      inventrack-backend:1.0.0    app=backend,pod-template-hash=746d844554
+replicaset.apps/frontend-74499cd756   1         1         1       17m   frontend     inventrack-frontend:1.0.0   app=frontend,pod-template-hash=74499cd756
+replicaset.apps/mysql-5c4d8b7f97      1         1         1       17m   mysql        inventrack-mysql:1.0.0      app=mysql,pod-template-hash=5c4d8b7f97
+
+=== kubectl get pvc,networkpolicy -n inventrack-prod ===
+NAME                                    STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE   VOLUMEMODE
+persistentvolumeclaim/backend-uploads   Bound    pvc-7fbbc7d5-06d7-4986-83dc-d8249ce05af5   2Gi        RWO            standard       <unset>                 17m   Filesystem
+persistentvolumeclaim/mysql-data        Bound    pvc-cfac9752-a9fb-4e2e-9e5e-1a21dfd53486   5Gi        RWO            standard       <unset>                 17m   Filesystem
+
+NAME                                                         POD-SELECTOR   AGE
+networkpolicy.networking.k8s.io/backend-from-ingress-only    app=backend    17m
+networkpolicy.networking.k8s.io/frontend-from-ingress-only   app=frontend   17m
+networkpolicy.networking.k8s.io/mysql-from-backend-only      app=mysql      17m
+
+=== kubectl get secret -n inventrack-prod ===
+NAME                TYPE     DATA   AGE
+inventrack-secret   Opaque   3      17m

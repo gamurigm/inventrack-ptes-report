@@ -1,0 +1,10 @@
+target_host=conjunta3p.espe.edu.ec
+expected_ip=192.168.49.2
+getent:
+192.168.49.2    STREAM conjunta3p.espe.edu.ec
+192.168.49.2    DGRAM  
+192.168.49.2    RAW    
+commands_from_kali:
+  getent ahostsv4 "$TARGET_HOST"
+  test "$(getent ahostsv4 "$TARGET_HOST" | awk '{print $1}' | sort -u)" = "$TARGET_IP"
+  curl -sS -i --max-time 10 "$TARGET_URL/api/health"

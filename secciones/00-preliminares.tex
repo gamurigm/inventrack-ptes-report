@@ -1,0 +1,40 @@
+\chapter*{Identificación del documento}
+\addcontentsline{toc}{chapter}{Identificación del documento}
+
+\begin{table}[H]
+\caption{Ficha de identificación del informe}
+\label{tab:identificacion}
+\centering
+\begingroup
+\rowcolors{2}{SoftGray}{white}
+\begin{tabularx}{\textwidth}{>{\bfseries\color{EspeGreenDark}}p{0.30\textwidth}X}
+\toprule
+Documento & Informe técnico final de InvenTrack \\
+Autor & \ReportAuthor \\
+Asignatura & Desarrollo Seguro \\
+Institución & Universidad de las Fuerzas Armadas ESPE \\
+Período académico & \AcademicPeriod \\
+Fecha del informe & \ReportDate \\
+Entorno & WSL Ubuntu, Kali Linux WSL, Docker, Minikube y Kubernetes \\
+Dominio del laboratorio & \url{http://conjunta3p.espe.edu.ec} \\
+Repositorio del informe & \href{\ReportRepo}{\ReportRepo} \\
+Repositorio Kubernetes & \href{\KubernetesRepo}{\KubernetesRepo} \\
+Repositorio de la aplicación & \href{\ApplicationRepo}{\ApplicationRepo} \\
+\bottomrule
+\end{tabularx}
+\endgroup
+\end{table}
+
+\vspace{0.45cm}
+
+\begin{tcolorbox}[infobox]
+\textbf{Trazabilidad.} El cuerpo del informe resume los resultados y conserva
+los comandos ejecutados. El Anexo A funciona como mapa de rutas hacia cada
+archivo de evidencia incluido en el repositorio del informe.
+\end{tcolorbox}
+
+\clearpage
+\tableofcontents
+\clearpage
+\listoftables
+\clearpage

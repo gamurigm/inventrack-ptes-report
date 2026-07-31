@@ -1,0 +1,230 @@
+\chapter{PTES Fase 7 - Reporting}
+
+\section{Criterio de clasificacion}
+
+Los hallazgos se clasifican con CVSS v3.1 cuando existe un impacto de
+seguridad reproducible. Las observaciones de endurecimiento sin una cadena de
+explotacion demostrada se mantienen como informativas y no reciben una
+puntuacion artificial. Los controles efectivos se presentan de forma
+separada para evidenciar que tambien fueron probados.
+
+\section{Resumen ejecutivo de hallazgos}
+
+\begin{center}
+\captionof{table}{Resumen ejecutivo de hallazgos y severidad}\label{tab:hallazgos}
+\end{center}
+{\def\LTcaptype{none}
+\begin{longtable}{@{}p{0.08\textwidth}p{0.26\textwidth}p{0.18\textwidth}p{0.10\textwidth}p{0.22\textwidth}@{}}
+\toprule
+\textbf{ID} & \textbf{Hallazgo} & \textbf{Vector CVSS v3.1} & \textbf{Puntaje} & \textbf{Clasificacion} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Hallazgo} & \textbf{Vector CVSS v3.1} & \textbf{Puntaje} & \textbf{Clasificacion} \\
+\midrule
+\endhead
+F-01 &
+El registro publico permite solicitar el rol \texttt{admin} y obtener acceso
+administrativo sin autorizacion previa. &
+\path{AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H} &
+\textbf{9.8} &
+\severity{4}{Critico} \\
+
+F-02 &
+El endpoint diagnostico \texttt{/api/db-test} esta publicado sin
+autenticacion y puede revelar mensajes internos en la ruta de error. &
+\path{AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N} &
+\textbf{5.3} &
+\severity{2}{Medio} \\
+
+F-03 &
+La carga de imagen confia en extension y MIME declarado; un archivo de texto
+renombrado como JPG fue aceptado y servido sin
+\texttt{X-Content-\allowbreak Type-Options}. &
+\path{AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N} &
+\textbf{6.1} &
+\severity{2}{Medio} \\
+
+F-04 &
+La carga masiva convierte un valor numerico invalido a cero en lugar de
+rechazar la fila, afectando la integridad de datos de inventario. &
+\path{AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:L/A:N} &
+\textbf{2.7} &
+\severity{1}{Bajo} \\
+
+O-01 &
+CORS responde con \texttt{Access-Control-Allow-\allowbreak Origin: *}, pero no habilita
+credenciales cross-origin y los endpoints sensibles mantienen JWT. &
+No aplica &
+N/A &
+\severity{0}{Observacion} \\
+
+O-02 &
+El frontend no define CSP ni \texttt{Permissions-Policy}. &
+No aplica &
+N/A &
+\severity{0}{Endurecimiento} \\
+
+O-03 &
+El dominio local apunta al nodo Minikube; Nmap observo puertos de plataforma
+fuera de la superficie web. &
+No aplica &
+N/A &
+\severity{0}{Topologia} \\
+
+O-04 &
+El backend usa \texttt{DB\_USER: root}, lo que ampliaria el impacto de un
+compromiso futuro del pod. &
+No aplica &
+N/A &
+\severity{0}{Arquitectura} \\
+
+O-05 &
+No se deshabilita el montaje automatico del token de ServiceAccount y no
+existe una politica de egreso por defecto. &
+No aplica &
+N/A &
+\severity{0}{Kubernetes} \\
+\bottomrule
+\end{longtable}
+}
+
+\begin{tcolorbox}[criticalbox,title={F-01 - Escalacion de privilegios desde el registro}]
+\textbf{Resultado.} Una solicitud anonima a
+\texttt{POST /api/auth/register} acepto \texttt{rol: admin}; el login
+posterior emitio un JWT administrativo y permitio consultar
+\texttt{/api/usuarios}. La cuenta temporal fue desactivada al terminar.
+
+\textbf{Impacto.} Compromiso de confidencialidad e integridad del inventario,
+usuarios y auditoria, con capacidad administrativa sobre la aplicacion.
+
+\textbf{Mitigacion.} Ignorar cualquier rol recibido desde el cliente,
+asignar el rol minimo en el backend, cerrar el registro publico y reservar la
+creacion de administradores para un flujo autenticado y auditado.
+\end{tcolorbox}
+
+\section{Controles de seguridad validados}
+
+\begin{center}
+\captionof{table}{Controles de seguridad validados}\label{tab:controles-validados}
+\end{center}
+{\def\LTcaptype{none}
+\begin{longtable}{p{0.12\textwidth}p{0.38\textwidth}p{0.39\textwidth}}
+\toprule
+\textbf{ID} & \textbf{Control} & \textbf{Resultado observado} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Control} & \textbf{Resultado observado} \\
+\midrule
+\endhead
+C-01 & Rate limiting del login &
+Tres respuestas 401 y una cuarta 429 con
+\texttt{RateLimit-Remaining: 0} y \texttt{Retry-After}. \\
+C-02 & Validacion JWT &
+401 sin token, 403 con token invalido o alterado y 200 con JWT valido. \\
+C-03 & Revocacion por usuario inactivo &
+El token previo fue rechazado con 403 despues de desactivar la cuenta. \\
+C-04 & RBAC admin/almacenero &
+El almacenero recibio 403 en usuarios, auditoria, eliminacion y restauracion. \\
+C-05 & SQLi clasica en login &
+La prueba no emitio token ni mostro errores SQL; se mantiene el uso de
+consultas parametrizadas. \\
+C-06 & Bcrypt &
+Ocho registros mostraron longitud 60 y prefijo \texttt{\$2b\$}, sin exponer
+hashes completos. \\
+C-07 & Chatbot &
+No revelo prompt ni secretos, trato la cadena SQL como texto y mantuvo el
+alcance de datos de inventario. \\
+C-08 & Contenedores y Kubernetes &
+Backend y frontend operan sin root; el retest final mostro pods
+\texttt{1/1 Running}, cero reinicios y health HTTP 200. \\
+\bottomrule
+\end{longtable}
+}
+
+\section{Recomendaciones priorizadas}
+
+\begin{enumerate}
+  \item \textbf{Inmediata:} corregir el registro para impedir que el cliente
+  seleccione el rol y desactivar el registro publico de administradores.
+
+  \item \textbf{Alta:} retirar o proteger \texttt{/api/db-test}; las rutas de
+  error deben devolver mensajes genericos y registrar el detalle solo en logs
+  internos.
+
+  \item \textbf{Alta:} validar archivos por contenido real, extension, MIME y
+  firma; almacenar fuera de rutas ejecutables, generar nombres seguros y
+  devolver \texttt{X-Content-Type-Options: nosniff}.
+
+  \item \textbf{Media:} validar tipos y rangos en carga masiva. Una fila con
+  numero invalido debe rechazarse con un error identificable y no convertirse
+  silenciosamente a cero.
+
+  \item \textbf{Media:} limitar CORS a los origenes necesarios y definir una
+  CSP compatible con Vite/React, junto con \texttt{Permissions-Policy}.
+
+  \item \textbf{Continua:} mantener pruebas automatizadas para JWT, RBAC,
+  rate limit, bcrypt y revocacion de sesion en cada entrega.
+
+  \item \textbf{Alta:} crear un usuario MySQL exclusivo para la aplicacion
+  con privilegios minimos y reservar \texttt{root} para administracion.
+
+  \item \textbf{Media:} definir \texttt{automountServiceAccountToken: false}
+  en workloads que no consumen la API de Kubernetes.
+
+  \item \textbf{Media:} agregar una politica de egreso \texttt{default-deny}
+  y permitir solo DNS, backend hacia MySQL y el destino externo necesario.
+\end{enumerate}
+
+\section{Plan de retest}
+
+\begin{enumerate}
+  \item Repetir el registro anonimo solicitando \texttt{rol: admin}; se espera
+  rechazo o asignacion forzada del rol minimo.
+  \item Confirmar que \texttt{/api/db-test} devuelve 404 o 401/403 y nunca
+  propaga \texttt{error.message}.
+  \item Repetir E05-14 con un marcador de texto renombrado; se espera 400/415.
+  \item Repetir la carga masiva con \texttt{abc} en un campo numerico; se
+  espera que la fila sea rechazada sin crear productos.
+  \item Ejecutar nuevamente ZAP, cabeceras, health, pods y eventos.
+  \item Repetir Nuclei con un conjunto web acotado que pueda finalizar; el
+  barrido actual de 1\% no debe presentarse como cobertura completa.
+  \item Ejecutar una matriz pod a pod solo tras aprobar el addendum de alcance;
+  si el punto de entrada es \texttt{kubectl exec}, reportarla como simulacion
+  de brecha y no como movimiento lateral explotado.
+\end{enumerate}
+
+\section{Conclusiones}
+
+La practica completo el ciclo de contenerizacion, despliegue Kubernetes,
+exposicion por Ingress y evaluacion PTES. El sistema fue comprometido a nivel
+de aplicacion: una solicitud anonima creo una cuenta administradora, obtuvo un
+JWT con rol \texttt{admin} y accedio a datos protegidos. Este escalamiento
+vertical es una vulneracion real y constituye el hallazgo critico principal.
+
+Los controles de bcrypt, JWT, revocacion por estado activo, RBAC, rate
+limiting, consultas parametrizadas y aislamiento de contenedores respondieron
+de acuerdo con las pruebas ejecutadas. No se demostro movimiento lateral
+porque no se obtuvo ejecucion de codigo ni un punto de apoyo dentro de un pod.
+El retest final confirmo que la limpieza no afecto la disponibilidad.
+
+\section{Limitaciones}
+
+\begin{itemize}
+  \item El alcance se limito al laboratorio local autorizado y al dominio
+  \texttt{conjunta3p.espe.edu.ec}.
+  \item No se ejecutaron ataques destructivos, cracking de hashes, extraccion
+  completa de la base ni pruebas contra la infraestructura de Groq.
+  \item Burp Suite, Hydra y SQLMap no tienen evidencia de ejecucion. Sus
+  casos se sustituyeron o descartaron con justificacion y no se les atribuyen
+  resultados.
+  \item No se ejecutaron movimiento lateral, acceso a kubelet/etcd/API Server,
+  lectura de tokens de ServiceAccount, MySQL directo, RCE ni escape de
+  contenedor. El borrador de ampliacion no autoriza pruebas.
+  \item Nikto tuvo un timebox de 90 segundos; Nuclei cubrio solo 1\% de las
+  solicitudes estimadas; ZAP completo un quick scan no autenticado. Estas
+  limitaciones se complementaron con validacion manual.
+  \item Los puntajes CVSS representan el impacto demostrado en este entorno y
+  deben recalcularse si cambia la arquitectura de produccion.
+\end{itemize}

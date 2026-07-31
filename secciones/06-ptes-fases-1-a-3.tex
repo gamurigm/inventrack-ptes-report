@@ -1,0 +1,114 @@
+\section{PTES Fase 1 - Pre-engagement Interactions}\label{ptes-fase-1---pre-engagement-interactions}
+
+Estado: completado.
+
+Se definieron el alcance, objetivos, reglas de juego, exclusiones, limites de velocidad y criterios de parada antes de iniciar reconocimiento desde Kali. El objetivo autorizado es unicamente conjunta3p.espe.edu.ec resuelto al IP local 192.168.49.2 de Minikube. No se probaran infraestructura institucional, API de Kubernetes, MySQL directo, Groq ni el host Windows.
+
+Las cuentas admin y almacenero de laboratorio se registraron dentro de Kubernetes sin incluir contrasenas en evidencias.
+
+Los comandos de esta fase estan documentados en \texttt{Registro\ Completo\ de\ Comandos\ \textgreater{}\ PTES\ 01\ -\ Pre-engagement}.
+
+Evidencia: evidencias/ptes/01-pre-engagement/P01-01\_alcance-autorizacion.md.
+
+\section{PTES Fase 2 - Intelligence Gathering}\label{ptes-fase-2---intelligence-gathering}
+
+Estado: completado con reconocimiento moderado desde Kali.
+
+La validacion fail-closed confirmo que conjunta3p.espe.edu.ec resuelve a 192.168.49.2, la IP local de Minikube, y que /api/health devuelve HTTP 200. El escaneo de servicios acotado identifico:
+
+\begin{itemize}
+\tightlist
+\item
+  80/tcp abierto: HTTP, Nginx reverse proxy.
+\item
+  443/tcp abierto: SSL/HTTP, Nginx reverse proxy.
+\item
+  WhatWeb detecto HTML5, script module, titulo InvenTrack, X-Frame-Options DENY, X-Content-Type-Options y Referrer-Policy.
+\end{itemize}
+
+Rutas conocidas observadas:
+
+\begin{itemize}
+\tightlist
+\item
+  / y /login: HTTP 200.
+\item
+  /api/health: HTTP 200.
+\item
+  /api/db-test: HTTP 200 sin autenticacion; queda como candidato para Vulnerability Analysis.
+\item
+  /api/productos: HTTP 401, consistente con una ruta protegida.
+\item
+  /uploads/: HTTP 404 sin archivo por defecto.
+\item
+  /api/auth/login: HTTP 404 para GET; el endpoint esperado usa POST.
+\end{itemize}
+
+Las cabeceras mostraron X-Frame-Options DENY, X-Content-Type-Options nosniff y Referrer-Policy en el frontend; el backend expuso X-Powered-By: Express y Access-Control-Allow-Origin: *.
+
+El barrido TCP completo finalizo en 655.48 segundos y encontro 14 puertos abiertos. Para evitar ampliar el alcance, solo se hizo deteccion de version sobre 80/tcp y 443/tcp. Los demas puertos corresponden a la superficie del nodo local de Minikube y se registran como observacion de topologia, sin enumeracion ni explotacion:
+
+\begin{itemize}
+\tightlist
+\item
+  Superficie web de InvenTrack: 80/tcp y 443/tcp.
+\item
+  Superficie del nodo/plataforma observada: 22, 2376, 2379, 2380, 8443, 10010, 10249, 10250 y 10256.
+\item
+  Puertos altos observados: 31358, 31454 y 33337.
+\end{itemize}
+
+\subsection{Evidencia visible de Nmap y WhatWeb}\label{evidencia-visible-de-nmap-y-whatweb}
+
+La salida cruda de Nmap conserva el comando, el host local y el tiempo real de ejecucion:
+
+\begin{tcolorbox}[codebox]
+\begin{Verbatim}[fontsize=\scriptsize,breaklines=true,breakanywhere=true]
+NaN
+NaN
+NaN
+NaN
+NaN
+
+NaN
+0
+NaN
+NaN
+NaN
+NaN
+NaN
+NaN
+NaN
+0
+NaN
+
+Los comandos de esta fase estan documentados en `Registro Completo de Comandos > PTES 02 - Intelligence Gathering`.
+
+Inventario completo de evidencias PTES Fase 2:
+
+- `evidencias/ptes/02-intelligence/E02-01_resolucion.txt`
+- `evidencias/ptes/02-intelligence/E02-01_health.txt`
+- `evidencias/ptes/02-intelligence/E02-02_nmap-tcp.nmap`
+- `evidencias/ptes/02-intelligence/E02-02_nmap-tcp.gnmap`
+- `evidencias/ptes/02-intelligence/E02-02_nmap-tcp.xml`
+- `evidencias/ptes/02-intelligence/E02-02_nmap-tcp-timeout.md`
+- `evidencias/ptes/02-intelligence/E02-03_nmap-servicios.nmap`
+- `evidencias/ptes/02-intelligence/E02-03_nmap-servicios.gnmap`
+- `evidencias/ptes/02-intelligence/E02-03_nmap-servicios.xml`
+- `evidencias/ptes/02-intelligence/E02-04_whatweb.txt`
+- `evidencias/ptes/02-intelligence/E02-05_headers-root.txt`
+- `evidencias/ptes/02-intelligence/E02-06_headers-api.txt`
+- `evidencias/ptes/02-intelligence/E02-06_health-body.txt`
+- `evidencias/ptes/02-intelligence/E02-07_rutas-conocidas.txt`
+
+## PTES Fase 3 - Threat Modeling
+
+Estado: completado.
+
+Se modelaron los activos de autenticacion, JWT, inventario, kardex, auditoria, uploads, cargas Excel/CSV, MySQL/PVC, db-test y chatbot. Tambien se documentaron los limites de confianza entre navegador, Ingress, Services, backend, MySQL y la integracion externa excluida. El modelo se complemento con la perspectiva Kubernetes de guia-pentest-k8s.md: namespace, Services ClusterIP, NetworkPolicies, Secrets, PVC y securityContext; las superficies de control plane quedaron explicitamente fuera de alcance.
+
+Las hipotesis prioritarias para las fases siguientes fueron registro con rol privilegiado, autenticacion y JWT, RBAC/IDOR, SQLi, carga de archivos, rate limiting y divulgacion mediante endpoints de diagnostico. Las pruebas E05-01 a E05-13 ya reprodujeron y clasificaron los controles de registro, SQLi, rate limiting, JWT, sesion y RBAC/IDOR.
+
+Evidencia: evidencias/ptes/03-threat-model/P03-01_threat-model.md.
+\end{Verbatim}
+\end{tcolorbox}

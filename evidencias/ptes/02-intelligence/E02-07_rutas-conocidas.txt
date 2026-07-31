@@ -1,0 +1,7 @@
+/ 200 459 http://conjunta3p.espe.edu.ec/
+/login 200 459 http://conjunta3p.espe.edu.ec/login
+/api/health 200 54 http://conjunta3p.espe.edu.ec/api/health
+/api/db-test 200 29 http://conjunta3p.espe.edu.ec/api/db-test
+/uploads/ 404 147 http://conjunta3p.espe.edu.ec/uploads/
+/api/auth/login 404 153 http://conjunta3p.espe.edu.ec/api/auth/login
+/api/productos 401 36 http://conjunta3p.espe.edu.ec/api/productos

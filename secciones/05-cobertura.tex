@@ -1,0 +1,58 @@
+\section{Matriz de cobertura contra implement.md y plan PTES}\label{matriz-de-cobertura-contra-implementmd-y-plan-ptes}
+
+Esta matriz evita declarar completa una fase solo por tener reconocimiento parcial.
+
+{\def\LTcaptype{none} % do not increment counter
+\small
+\setlength{\tabcolsep}{3pt}
+\captionof{table}{Matriz de cobertura de requisitos y pruebas}\label{tab:matriz-cobertura}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.39\linewidth}>{\raggedright\arraybackslash}p{0.17\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}@{}}
+\toprule\noalign{}
+Requisito & Estado & Evidencia o brecha \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Docker backend/frontend/MySQL & Completado & E01-01 a E01-08 \\
+Kubernetes, PVC, Secret, NetworkPolicies y seguridad no-root & Completado & E02-01 y E02-02 \\
+Ingress y dominio de laboratorio & Completado & E03-01 a E03-04 e imagenes E02-01/E03-01 \\
+PTES Fase 1 - alcance y autorizacion & Completado & P01-01 y P01-02 \\
+PTES Fase 2 - puertos, tecnologias, cabeceras y rutas & Completado con limites & P02-01 a P02-04 \\
+PTES Fase 3 - activos, fronteras y amenazas Kubernetes & Completado & P03-01 \\
+PTES Fase 4 - db-test, Nikto, Nuclei, ZAP, CORS y cabeceras & Completado & P04-01 a P04-09 \\
+TC-AUTH-01 registro con rol admin & Reproducido & P05-01; cuenta temporal desactivada \\
+TC-SQLI-01 SQLi en login & Control efectivo puntual & P05-02 \\
+TC-AUTH-03 rate limiting dinamico & Completado & P05-05: 401, 401, 401 y 429; RateLimit y Retry-After presentes \\
+TC-JWT-01 token ausente, invalido, alterado, claims y expiracion & Completado en esta prueba & E05-06 valida 401/403; E05-09 valida 200/403; E05-11 valida HS256, claims y TTL de 8 horas \\
+TC-RBAC-01 y TC-IDOR-01 & Completado & E05-13: almacenero recibe 403 en usuarios/auditoria/delete/restore; productos 25 y 26 son compartidos, sin IDOR demostrado \\
+TC-UPLOAD-01 imagen & Completado & E05-14: 401 sin JWT; text/plain 500; marcador JPG 200; cleanup y 404 verificados \\
+TC-UPLOAD-02 carga masiva & Completado & E05-15: sin JWT 401; almacenero 403; admin 200; error de SKU controlado; numero invalido convertido a 0; cleanup \\
+TC-AI-01 chatbot & Completado & E05-16: seis solicitudes 200; no revelo prompt ni secretos, trato SQL como texto y limpio la cuenta \\
+TC-SESS-01 revocacion por cuenta desactivada & Completado & E05-12: token previo rechazado con 403 tras PATCH activo=false; login posterior rechazado \\
+TC-BCRYPT-01 & Completado & E06-01: ocho usuarios con longitud 60 y prefijo \(2b\); sin hashes completos ni contrasenas \\
+PTES Fase 6 - impacto, persistencia, limpieza y retest & Completado & E05-12/E05-13/E05-14/E05-15 + E06-01/E06-02; impacto, bcrypt, limpieza y estabilidad validados \\
+PTES Fase 7 - CVSS, PDF, anexos y control final de secretos & Completado & Reporting final, CVSS, anexos y PDF compilado \\
+E00-04/E00-05 tests y build & Pendiente adicional & Recomendado antes del cierre, aunque no bloquea el despliegue ya validado \\
+\end{longtable}
+}
+
+\subsection{Aclaracion JWT y sesion}\label{aclaracion-jwt-y-sesion}
+
+El proyecto no implementa refresh token cada 5 segundos. El JWT se firma con expiracion de 8 horas. El control descrito por la documentacion es un sondeo de sesion contra /api/auth/perfil, que valida firma, expiracion y estado activo en base de datos. La fuente original usa 3000 ms; no se modifico. E05-12 midio la revocacion backend: el token previo fue rechazado despues de desactivar la cuenta. Queda como observacion separada comprobar visualmente el intervalo de sondeo del frontend frente a la exigencia documental de 5 segundos.
+
+\subsection{Cierre ejecutado}\label{cierre-ejecutado}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Rate limit dinamico validado en ventana limpia.
+\item
+  Uploads y carga masiva pequena validados.
+\item
+  Chatbot benigno validado sin probar directamente la infraestructura de Groq.
+\item
+  Bcrypt, impacto, limpieza y retest completados.
+\item
+  CVSS, anexos, PDF y revision final de secretos completados.
+\end{enumerate}

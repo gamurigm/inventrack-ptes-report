@@ -1,0 +1,49 @@
+WhatWeb report for http://conjunta3p.espe.edu.ec
+Status    : 200 OK
+Title     : InvenTrack
+IP        : 192.168.49.2
+Country   : RESERVED, ZZ
+
+Summary   : HTML5, Script[module], UncommonHeaders[x-content-type-options,referrer-policy], X-Frame-Options[DENY]
+
+Detected Plugins:
+[ HTML5 ]
+	HTML version 5, detected by the doctype declaration 
+
+
+[ Script ]
+	This plugin detects instances of script HTML elements and 
+	returns the script language/type. 
+
+	String       : module
+
+[ UncommonHeaders ]
+	Uncommon HTTP server headers. The blacklist includes all 
+	the standard headers and many non standard but common ones. 
+	Interesting but fairly common headers should have their own 
+	plugins, eg. x-powered-by, server and x-aspnet-version. 
+	Info about headers can be found at www.http-stats.com 
+
+	String       : x-content-type-options,referrer-policy (from headers)
+
+[ X-Frame-Options ]
+	This plugin retrieves the X-Frame-Options value from the 
+	HTTP header. - More Info: 
+	http://msdn.microsoft.com/en-us/library/cc288472%28VS.85%29.
+	aspx
+
+	String       : DENY
+
+HTTP Headers:
+	HTTP/1.1 200 OK
+	Date: Thu, 30 Jul 2026 21:33:45 GMT
+	Content-Type: text/html
+	Content-Length: 459
+	Connection: close
+	Last-Modified: Thu, 30 Jul 2026 20:23:57 GMT
+	ETag: "6a6bb2dd-1cb"
+	X-Content-Type-Options: nosniff
+	X-Frame-Options: DENY
+	Referrer-Policy: strict-origin-when-cross-origin
+	Accept-Ranges: bytes
+	

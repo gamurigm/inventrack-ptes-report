@@ -1,0 +1,4 @@
+# Nmap 7.99 scan initiated Thu Jul 30 16:29:43 2026 as: /usr/lib/nmap/nmap --privileged -Pn -sT -T3 --max-rate 100 -p- -oA "/mnt/c/Users/gamur/Documents/ESPE VII SI 2026/Desarrollo Seguro/U3/Conjunta/evidencias/ptes/02-intelligence/E02-02_nmap-tcp" conjunta3p.espe.edu.ec
+Host: 192.168.49.2 (conjunta3p.espe.edu.ec)	Status: Up
+Host: 192.168.49.2 (conjunta3p.espe.edu.ec)	Ports: 22/open/tcp//ssh///, 80/open/tcp//http///, 443/open/tcp//https///, 2376/open/tcp//docker///, 2379/open/tcp//etcd-client///, 2380/open/tcp//etcd-server///, 8443/open/tcp//https-alt///, 10010/open/tcp//rxapi///, 10249/open/tcp/////, 10250/open/tcp/////, 10256/open/tcp/////, 31358/open/tcp/////, 31454/open/tcp/////, 33337/open/tcp/////	Ignored State: closed (65521)
+# Nmap done at Thu Jul 30 16:40:39 2026 -- 1 IP address (1 host up) scanned in 655.48 seconds

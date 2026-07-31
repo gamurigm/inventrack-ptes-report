@@ -1,0 +1,43 @@
+\chapter{Repositorios y reproduccion}
+
+\section{Repositorio del informe y evidencias}
+
+El proyecto LaTeX, el PDF compilado y las evidencias completas se publican en:
+
+\begin{center}
+\Large\bfseries
+\href{\ReportRepo}{\ReportRepo}
+\end{center}
+
+La ruta principal de evidencia es:
+
+\begin{center}
+\href{\ReportRepo/tree/main/evidencias}
+{\nolinkurl{inventrack-ptes-report/evidencias/}}
+\end{center}
+
+\section{Repositorios relacionados}
+
+\begin{description}
+  \item[Manifiestos Kubernetes]
+  \href{\KubernetesRepo}{\KubernetesRepo}
+
+  \item[Aplicacion original]
+  \href{\ApplicationRepo}{\ApplicationRepo}
+\end{description}
+
+\section{Compilacion local}
+
+\begin{tcolorbox}[codebox]
+\begin{Verbatim}[fontsize=\footnotesize,breaklines=true,breakanywhere=true]
+git clone https://github.com/gamurigm/inventrack-ptes-report.git
+cd inventrack-ptes-report
+powershell -ExecutionPolicy Bypass -File .\build.ps1
+\end{Verbatim}
+\end{tcolorbox}
+
+El artefacto final se genera en:
+
+\begin{center}
+\nolinkurl{output/pdf/INFORME_FINAL_INVENTRACK_PTES.pdf}
+\end{center}

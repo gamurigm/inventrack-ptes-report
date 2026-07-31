@@ -1,0 +1,71 @@
+\section{Evidencias}\label{evidencias}
+
+{\def\LTcaptype{none} % do not increment counter
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\captionof{table}{Inventario maestro de evidencias}\label{tab:inventario-evidencias}
+\begin{longtable}[]{@{}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.37\linewidth}>{\raggedright\arraybackslash}p{0.12\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}@{}}
+\toprule\noalign{}
+ID & Fase & Archivo & Estado & Descripcion \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+E00-01 & Preparacion & evidencias/\allowbreak{}00-preparacion/\allowbreak{}E00-01\_\allowbreak{}versiones-ubuntu.txt & Completado & Versiones de Ubuntu WSL, Docker, kubectl y Minikube \\
+E00-01-img & Preparacion & evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E00-01\_\allowbreak{}versiones-ubuntu.png & Completado & Captura de terminal G0 \\
+E00-02 & Preparacion & evidencias/\allowbreak{}00-preparacion/\allowbreak{}E00-02\_\allowbreak{}archivos-baseline.txt & Completado & Inventario inicial de archivos \\
+E00-03 & Preparacion & evidencias/\allowbreak{}00-preparacion/\allowbreak{}E00-03\_\allowbreak{}git-status.txt & Completado & Estado Git inicial en main \\
+E00-04 & Preparacion & evidencias/\allowbreak{}00-preparacion/\allowbreak{}E00-04\_\allowbreak{}backend-tests.txt & Pendiente & Tests backend \\
+E00-05 & Preparacion & evidencias/\allowbreak{}00-preparacion/\allowbreak{}E00-05\_\allowbreak{}frontend-build.txt & Pendiente & Build frontend \\
+E01-01 & Docker & evidencias/\allowbreak{}01-docker/\allowbreak{}E01-01\_\allowbreak{}docker-compose-build.txt & Completado & Build de backend, frontend y MySQL \\
+E01-02 & Docker & evidencias/\allowbreak{}01-docker/\allowbreak{}E01-02\_\allowbreak{}docker-compose-up.txt & Completado & Arranque de Docker Compose \\
+E01-03 & Docker & evidencias/\allowbreak{}01-docker/\allowbreak{}E01-03\_\allowbreak{}docker-compose-ps.txt & Completado & Contenedores y MySQL healthy \\
+E01-04 & Docker & evidencias/\allowbreak{}01-docker/\allowbreak{}E01-04\_\allowbreak{}http-health-compose.txt & Completado & Health HTTP de backend y frontend \\
+E01-04-img & Docker & evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E01-04\_\allowbreak{}docker-http-health.png & Completado & Captura de Compose y respuestas HTTP 200 \\
+E01-05 & Docker & evidencias/\allowbreak{}01-docker/\allowbreak{}E01-05\_\allowbreak{}container-users.txt & Completado & Usuarios no root en backend y frontend \\
+E01-06 & Docker & evidencias/\allowbreak{}01-docker/\allowbreak{}E01-06\_\allowbreak{}frontend-proxy-rebuild.txt & Completado & Proxy Nginx para API y uploads \\
+E01-07 & Docker & evidencias/\allowbreak{}01-docker/\allowbreak{}E01-07\_\allowbreak{}frontend-proxy-health.txt & Completado & API proxificada por frontend \\
+E01-08-img & Docker & evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E01-08\_\allowbreak{}docker-ps.png & Completado & Backend, frontend y MySQL en estado Up \\
+E02-01 & Kubernetes & evidencias/\allowbreak{}02-k8s/\allowbreak{}E02-01\_\allowbreak{}kubectl-recursos.txt & Completado & Pods, Services, PVC, policies y Secret \\
+E02-01-img & Kubernetes & evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E02-01\_\allowbreak{}kubernetes-recursos-ingress.png & Completado & Captura de recursos e Ingress \\
+E02-02 & Kubernetes & evidencias/\allowbreak{}02-k8s/\allowbreak{}E02-02\_\allowbreak{}rollouts.txt & Completado & Minikube, nodo Ready y rollouts \\
+E03-01 & Ingress & evidencias/\allowbreak{}03-ingress/\allowbreak{}E03-01\_\allowbreak{}ingress-http.txt & Completado & Health y frontend por Ingress \\
+E03-01-img & Ingress & evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E03-01\_\allowbreak{}login-dominio.png & Completado & Login bajo el dominio \\
+E03-02 & Kubernetes & evidencias/\allowbreak{}03-ingress/\allowbreak{}E03-02\_\allowbreak{}seed-kubernetes.txt & Completado & Seed protegido y conteos de datos \\
+E03-03 & Ingress & evidencias/\allowbreak{}03-ingress/\allowbreak{}E03-03\_\allowbreak{}limpieza-colision-ingress.md & Completado & Limpieza autorizada de Ingress anterior en conflicto \\
+E03-04 & Ingress & evidencias/\allowbreak{}03-ingress/\allowbreak{}E03-04\_\allowbreak{}resolucion-hosts.txt & Completado & Hosts de Windows/\allowbreak{}Kali y portproxy del laboratorio \\
+P01-01 & PTES 1 & evidencias/\allowbreak{}ptes/\allowbreak{}01-pre-engagement/\allowbreak{}P01-01\_\allowbreak{}alcance-autorizacion.md & Completado & Alcance y reglas de juego \\
+P01-02 & PTES 1 & evidencias/\allowbreak{}ptes/\allowbreak{}01-pre-engagement/\allowbreak{}P01-02\_\allowbreak{}cuentas-laboratorio.md & Completado & Cuentas admin y almacenero de laboratorio sin contrasenas \\
+P01-03 & PTES 1 & evidencias/\allowbreak{}ptes/\allowbreak{}01-pre-engagement/\allowbreak{}P01-03\_\allowbreak{}borrador-ampliacion-movimiento-lateral.md & Borrador & Propuesta no autorizada para segmentacion y brecha asumida \\
+P02-01 & PTES 2 & evidencias/\allowbreak{}ptes/\allowbreak{}02-intelligence/\allowbreak{}E02-01\_\allowbreak{}resolucion.txt; evidencias/\allowbreak{}ptes/\allowbreak{}02-intelligence/\allowbreak{}E02-01\_\allowbreak{}health.txt & Completado & Resolucion fail-closed y health \\
+P02-02 & PTES 2 & evidencias/\allowbreak{}ptes/\allowbreak{}02-intelligence/\allowbreak{}E02-02\_\allowbreak{}nmap-tcp.nmap; E02-02\_\allowbreak{}nmap-tcp.gnmap; E02-02\_\allowbreak{}nmap-tcp.xml; E02-02\_\allowbreak{}nmap-tcp-timeout.md & Completado & Barrido TCP completo en 655.48 s y primer intento limitado documentado \\
+P02-03 & PTES 2 & evidencias/\allowbreak{}ptes/\allowbreak{}02-intelligence/\allowbreak{}E02-03\_\allowbreak{}nmap-servicios.nmap; evidencias/\allowbreak{}ptes/\allowbreak{}02-intelligence/\allowbreak{}E02-03\_\allowbreak{}nmap-servicios.gnmap; evidencias/\allowbreak{}ptes/\allowbreak{}02-intelligence/\allowbreak{}E02-03\_\allowbreak{}nmap-servicios.xml & Completado & Nginx en 80/\allowbreak{}tcp y 443/\allowbreak{}tcp \\
+P02-04 & PTES 2 & evidencias/\allowbreak{}ptes/\allowbreak{}02-intelligence/\allowbreak{}E02-04\_\allowbreak{}whatweb.txt; E02-05\_\allowbreak{}headers-root.txt; E02-06\_\allowbreak{}headers-api.txt; E02-06\_\allowbreak{}health-body.txt; E02-07\_\allowbreak{}rutas-conocidas.txt & Completado & Tecnologias, cabeceras y rutas \\
+P03-01 & PTES 3 & evidencias/\allowbreak{}ptes/\allowbreak{}03-threat-model/\allowbreak{}P03-01\_\allowbreak{}threat-model.md & Completado & Activos y modelo de amenazas \\
+P04-01 & PTES 4 & evidencias/\allowbreak{}ptes/\allowbreak{}04-vulnerability-analysis/\allowbreak{}E04-00\_\allowbreak{}precheck-db-test.txt & Completado & Validacion fail-closed y db-test publico reproducible \\
+P04-02 & PTES 4 & evidencias/\allowbreak{}ptes/\allowbreak{}04-vulnerability-analysis/\allowbreak{}E04-01\_\allowbreak{}db-test-code-review.md & Completado & Revision estatica de autenticacion, consulta y error 500 \\
+P04-03 & PTES 4 & evidencias/\allowbreak{}ptes/\allowbreak{}04-vulnerability-analysis/\allowbreak{}E04-02\_\allowbreak{}nikto.txt & Completado & Nikto parcial con limite de tiempo y observaciones de cabeceras \\
+P04-04 & PTES 4 & evidencias/\allowbreak{}ptes/\allowbreak{}04-vulnerability-analysis/\allowbreak{}E04-03\_\allowbreak{}nikto-false-positive-check.txt & Completado & Verificacion manual de rutas reportadas por Nikto \\
+P04-05 & PTES 4 & evidencias/\allowbreak{}ptes/\allowbreak{}04-vulnerability-analysis/\allowbreak{}E04-04\_\allowbreak{}nuclei.txt & Parcial & Nuclei alcanzo 333/\allowbreak{}18312 solicitudes (1\%); no permite concluir ausencia \\
+P04-06 & PTES 4 & evidencias/\allowbreak{}ptes/\allowbreak{}04-vulnerability-analysis/\allowbreak{}E04-05\_\allowbreak{}tool-availability.txt & Historico & ZAP inicialmente no estaba instalado en Kali \\
+P04-07 & PTES 4 & evidencias/\allowbreak{}ptes/\allowbreak{}04-vulnerability-analysis/\allowbreak{}E04-06\_\allowbreak{}cors-headers.txt & Completado & CORS permisivo y cabeceras defensivas comprobadas \\
+P04-08 & PTES 4 & evidencias/\allowbreak{}ptes/\allowbreak{}04-vulnerability-analysis/\allowbreak{}E04-07\_\allowbreak{}capture-db-test.txt; evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E04-07\_\allowbreak{}db-test-http-200.png & Completado & Captura reproducible del endpoint diagnostico publico \\
+P04-09 & PTES 4 & evidencias/\allowbreak{}ptes/\allowbreak{}04-vulnerability-analysis/\allowbreak{}E04-11\_\allowbreak{}zap-report.html; E04-11\_\allowbreak{}zap-console.txt; E04-12\_\allowbreak{}zap-analysis.md; evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E04-11\_\allowbreak{}zap-summary.png & Completado & ZAP 2.17.0: CSP, timestamp y alertas informativas; sin alertas altas \\
+P05-01 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-01\_\allowbreak{}auth-role-escalation.txt & Completado & Registro anonimo creo cuenta admin y la cuenta fue limpiada \\
+P05-02 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-02\_\allowbreak{}sqli-login.txt & Completado & SQLi clasica rechazada con 401 y sin token \\
+P05-03 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-03\_\allowbreak{}rate-limit-code-review.md & Completado & Ventana, maximo y cabeceras del rate limit revisados \\
+P05-04 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-04\_\allowbreak{}jwt-session-control.md & Completado & Diferencia entre refresh JWT y sondeo de sesion documentada sin modificar fuente \\
+P05-05 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-05\_\allowbreak{}rate-limit-dynamic.txt & Completado & Tres 401 y cuarto 429 con cabeceras RateLimit \\
+P05-06 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-06\_\allowbreak{}jwt-negative.txt; E05-07\_\allowbreak{}jwt-negative-analysis.md; evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E05-06\_\allowbreak{}jwt-negative.png & Completado & Token ausente rechazado con 401 e invalido con 403 \\
+P05-07 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-09\_\allowbreak{}jwt-valid-vs-tampered.txt; E05-10\_\allowbreak{}jwt-valid-vs-tampered-analysis.md; evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E05-09\_\allowbreak{}jwt-valid-vs-tampered.png & Completado & JWT valido aceptado con 200 y JWT alterado rechazado con 403 \\
+P05-08 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-11\_\allowbreak{}jwt-claims-expiration.txt; evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E05-11\_\allowbreak{}jwt-claims-expiration.png & Completado & Claims seguros y TTL de 8 horas documentados \\
+P05-09 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-12\_\allowbreak{}jwt-revocation.txt; evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E05-12\_\allowbreak{}jwt-revocation.png & Completado & Token previo rechazado tras desactivar cuenta; login posterior tambien rechazado \\
+P05-10 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-13\_\allowbreak{}rbac-idor.txt; evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E05-13\_\allowbreak{}rbac-idor.png & Completado & Admin 200; almacenero 403 en funciones administrativas y 200 en productos; IDOR no demostrado \\
+P05-11 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-14\_\allowbreak{}upload-image.txt; evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E05-14\_\allowbreak{}upload-validation.png & Completado & Sin JWT 401; text/\allowbreak{}plain 500; marcador JPG aceptado; cleanup y 404 verificados \\
+P05-12 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-15\_\allowbreak{}mass-upload.txt; evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E05-15\_\allowbreak{}mass-upload.png & Completado & Admin creo 2; almacenero 403; fila sin SKU reportada; fila numerica invalida aceptada; cleanup completo \\
+P05-13 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-16\_\allowbreak{}attempt-admin-login.txt & Fallo operativo & Login admin rechazo credenciales; chatbot no invocado ni cuenta temporal creada \\
+P05-14 & PTES 5 & evidencias/\allowbreak{}ptes/\allowbreak{}05-exploitation/\allowbreak{}E05-16\_\allowbreak{}chatbot.txt; evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E05-16\_\allowbreak{}chatbot.png & Completado & Seis respuestas 200; prompt, SQL y secretos no revelados; cuenta temporal limpiada \\
+P06-01 & PTES 6 & evidencias/\allowbreak{}ptes/\allowbreak{}06-post-exploitation/\allowbreak{}E06-01\_\allowbreak{}bcrypt.txt; evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E06-01\_\allowbreak{}bcrypt.png & Completado & Ocho usuarios; longitud 60 y prefijo \(2b\); sin hashes completos ni contrasenas \\
+P06-02 & PTES 6 & evidencias/\allowbreak{}ptes/\allowbreak{}06-post-exploitation/\allowbreak{}E06-02\_\allowbreak{}retest-cleanup.txt; evidencias/\allowbreak{}report/\allowbreak{}img/\allowbreak{}E06-02\_\allowbreak{}retest-cleanup.png & Completado & DNS validado con Minikube; health HTTP 200; pods estables y eventos normales \\
+\end{longtable}
+}

@@ -1,0 +1,28 @@
+E03-04 - Resolucion local del dominio de laboratorio
+Fecha: 2026-07-30
+Dominio: conjunta3p.espe.edu.ec
+
+Windows hosts (linea relevante):
+127.0.0.1 conjunta3p.espe.edu.ec
+
+Windows portproxy (linea relevante):
+127.0.0.1       80          172.25.209.128  9080
+
+Kali /etc/hosts (linea relevante):
+192.168.49.2 conjunta3p.espe.edu.ec
+
+Kali getent ahostsv4:
+192.168.49.2    STREAM conjunta3p.espe.edu.ec
+192.168.49.2    DGRAM
+192.168.49.2    RAW
+
+Comandos de comprobacion:
+- Windows: Get-Content C:\Windows\System32\drivers\etc\hosts | Select-String conjunta3p.espe.edu.ec
+- Windows: netsh interface portproxy show v4tov4
+- Kali: grep -F 'conjunta3p.espe.edu.ec' /etc/hosts
+- Kali: getent ahostsv4 conjunta3p.espe.edu.ec
+
+Interpretacion:
+- El navegador Windows resuelve el dominio hacia 127.0.0.1; portproxy reenvia el puerto 80 hacia el listener WSL de Ingress.
+- Kali resuelve el mismo dominio directamente hacia 192.168.49.2, IP local de Minikube.
+- Ambos mapeos apuntan al laboratorio local, no a infraestructura externa.

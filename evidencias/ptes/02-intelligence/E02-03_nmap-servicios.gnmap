@@ -1,0 +1,4 @@
+# Nmap 7.99 scan initiated Thu Jul 30 16:33:06 2026 as: /usr/lib/nmap/nmap --privileged -Pn -sT -sV --version-light -T3 --max-retries 1 -p 80,443 -oA "/mnt/c/Users/gamur/Documents/ESPE VII SI 2026/Desarrollo Seguro/U3/Conjunta/evidencias/ptes/02-intelligence/E02-03_nmap-servicios" conjunta3p.espe.edu.ec
+Host: 192.168.49.2 (conjunta3p.espe.edu.ec)	Status: Up
+Host: 192.168.49.2 (conjunta3p.espe.edu.ec)	Ports: 80/open/tcp//http//nginx (reverse proxy)/, 443/open/tcp//ssl|http//nginx (reverse proxy)/
+# Nmap done at Thu Jul 30 16:33:24 2026 -- 1 IP address (1 host up) scanned in 17.61 seconds

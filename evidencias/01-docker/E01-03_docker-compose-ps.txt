@@ -1,0 +1,4 @@
+NAME                  IMAGE                                 COMMAND                  SERVICE    CREATED          STATUS                    PORTS
+inventrack-backend    conjunta-desarrollo-seguro-backend    "docker-entrypoint.s…"   backend    51 seconds ago   Up 3 seconds              0.0.0.0:4000->4000/tcp, [::]:4000->4000/tcp
+inventrack-frontend   conjunta-desarrollo-seguro-frontend   "/docker-entrypoint.…"   frontend   51 seconds ago   Up 2 seconds              0.0.0.0:5173->8080/tcp, [::]:5173->8080/tcp
+inventrack-mysql      conjunta-desarrollo-seguro-mysql      "docker-entrypoint.s…"   mysql      52 seconds ago   Up 50 seconds (healthy)   0.0.0.0:3306->3306/tcp, [::]:3306->3306/tcp, 33060/tcp
