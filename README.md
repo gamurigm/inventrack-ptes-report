@@ -7,16 +7,6 @@ Autor: Gabriel Murillo
 Institución: Universidad de las Fuerzas Armadas ESPE  
 Periodo: ESPE VII SI 2026
 
-## Estructura
-
-- `main.tex`: documento principal.
-- `preambulo.tex`: estilos, tipografía, colores y bloques `tcolorbox`.
-- `secciones/`: capítulos incorporados mediante `\input`.
-- `anexos/`: mapa completo de evidencias y repositorios.
-- `evidencias/`: salidas técnicas, análisis y capturas.
-- `scripts/`: conversión del informe y generación del mapa.
-- `output/pdf/`: PDF final compilado.
-
 ## Compilación
 
 ```powershell
