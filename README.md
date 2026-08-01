@@ -7,14 +7,7 @@ Autor: Gabriel Murillo
 Institución: Universidad de las Fuerzas Armadas ESPE  
 Periodo: ESPE VII SI 2026
 
-## Compilación
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\build.ps1
-```
-
 El PDF queda en:
-
 `output/pdf/INFORME_FINAL_INVENTRACK_PTES.pdf`
 
 ## Cuenta administrativa de laboratorio
